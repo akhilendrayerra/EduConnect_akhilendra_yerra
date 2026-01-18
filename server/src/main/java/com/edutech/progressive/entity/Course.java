@@ -37,6 +37,4 @@ public class Course {
     public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
-
-    
 }
