@@ -20,7 +20,7 @@ public class CourseDAOImpl implements CourseDAO {
         PreparedStatement ps = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, course.getCourseName());
         ps.setString(2, course.getDescription());
-        ps.setInt(3,course.getTeacherId());
+        ps.setInt(3,course.getTeacher().getTeacherId());
         ps.executeUpdate();
         ResultSet gk = ps.getGeneratedKeys();
         if(gk.next()){
@@ -51,7 +51,7 @@ public class CourseDAOImpl implements CourseDAO {
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setString(1, course.getCourseName());
         ps.setString(2, course.getDescription());
-        ps.setInt(3,course.getTeacherId());
+        ps.setInt(3,course.getTeacher().getTeacherId());
         ps.setInt(4,course.getCourseId());
         ps.executeUpdate();
     }
