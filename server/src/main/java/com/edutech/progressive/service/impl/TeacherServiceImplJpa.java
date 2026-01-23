@@ -25,8 +25,8 @@ public class TeacherServiceImplJpa implements TeacherService {
         return teacherRepository.findAll();
     }
 
-    public TeacherServiceImplJpa() {
-    }
+    // public TeacherServiceImplJpa() {
+    // }
 
     @Override
     public Integer addTeacher(Teacher teacher) throws Exception {
