@@ -48,24 +48,26 @@ public class StudentController {
 
     
     @PostMapping
-    public ResponseEntity<Integer> addStudent(@RequestBody Student student) {
+    public ResponseEntity<?> addStudent(@RequestBody Student student) {
         try {
             return new ResponseEntity<>(studentServiceImplJpa.addStudent(student),HttpStatus.CREATED);
-        // } catch (RuntimeException e) {
-        
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{studentId}")
-    public ResponseEntity<Void> updateStudent(@PathVariable int studentId,@RequestBody Student student) {
+    public ResponseEntity<?> updateStudent(@PathVariable int studentId,@RequestBody Student student) {
         try {
             student.setStudentId(studentId);
             studentServiceImplJpa.updateStudent(student);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            throw new RuntimeException("");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

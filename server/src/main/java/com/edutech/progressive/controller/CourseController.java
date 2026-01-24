@@ -38,38 +38,46 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<Course> getCourseById(@PathVariable int courseId) {
+    public ResponseEntity<?> getCourseById(@PathVariable int courseId) {
         try {
             return new ResponseEntity<Course>(courseServiceImplJpa.getCourseById(courseId), HttpStatus.OK);
+        } catch(RuntimeException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Integer> addCourse(@RequestBody Course course) {
+    public ResponseEntity<?> addCourse(@RequestBody Course course) {
         try {
             return new ResponseEntity<Integer>(courseServiceImplJpa.addCourse(course), HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{courseId}")
-    public ResponseEntity<Void> updateCourse(@PathVariable int courseId, @RequestBody Course course) {
+    public ResponseEntity<?> updateCourse(@PathVariable int courseId, @RequestBody Course course) {
         try {
             courseServiceImplJpa.updateCourse(course);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{courseId}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable int courseId) {
+    public ResponseEntity<?> deleteCourse(@PathVariable int courseId) {
         try {
             courseServiceImplJpa.deleteCourse(courseId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

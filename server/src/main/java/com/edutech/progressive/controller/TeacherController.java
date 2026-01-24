@@ -43,19 +43,23 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> addTeacher(@RequestBody Teacher teacher) {
+    public ResponseEntity<?> addTeacher(@RequestBody Teacher teacher) {
         try {
             return new ResponseEntity<>(teacherServiceImplJpa.addTeacher(teacher),HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{teacherId}")
-    public ResponseEntity<Void> updateTeacher(@PathVariable int teacherId,@RequestBody Teacher teacher) {
+    public ResponseEntity<?> updateTeacher(@PathVariable int teacherId,@RequestBody Teacher teacher) {
         try {
             teacherServiceImplJpa.updateTeacher(teacher);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

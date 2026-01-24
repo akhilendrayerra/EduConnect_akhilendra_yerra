@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.edutech.progressive.dto.StudentDTO;
 import com.edutech.progressive.entity.Student;
+import com.edutech.progressive.exception.StudentAlreadyExistsException;
 import com.edutech.progressive.repository.StudentRepository;
 import com.edutech.progressive.service.StudentService;
 
@@ -29,7 +30,11 @@ public class StudentServiceImplJpa implements StudentService {
 
     @Override
     public Integer addStudent(Student student) throws Exception {
-        return studentRepository.save(student).getStudentId();
+        Student existingStudent = studentRepository.findByEmail(student.getEmail());
+        if (existingStudent != null) {
+            throw new StudentAlreadyExistsException("Student with this email already exists, Email: " + student.getEmail());
+        }
+        return studentRepository.save(student).getStudentId();    
     }
 
     @Override
@@ -40,6 +45,10 @@ public class StudentServiceImplJpa implements StudentService {
     }
 
     public void updateStudent(Student student) throws Exception {
+        Student existingStudent = studentRepository.findByEmail(student.getEmail());
+        if (existingStudent != null && existingStudent.getStudentId() != student.getStudentId()) {
+            throw new StudentAlreadyExistsException("Student with this email already exists, Email: " + student.getEmail());
+        }
         studentRepository.save(student);
     }
 

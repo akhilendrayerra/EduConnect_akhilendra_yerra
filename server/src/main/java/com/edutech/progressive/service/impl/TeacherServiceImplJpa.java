@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edutech.progressive.entity.Teacher;
+import com.edutech.progressive.exception.TeacherAlreadyExistsException;
 import com.edutech.progressive.repository.TeacherRepository;
 import com.edutech.progressive.service.TeacherService;
 
@@ -30,6 +31,10 @@ public class TeacherServiceImplJpa implements TeacherService {
 
     @Override
     public Integer addTeacher(Teacher teacher) throws Exception {
+        Teacher existingTeacher = teacherRepository.findByEmail(teacher.getEmail());
+        if (existingTeacher != null) {
+            throw new TeacherAlreadyExistsException("Teacher with this email already exists, Email: " + teacher.getEmail());
+        }
         return teacherRepository.save(teacher).getTeacherId();
     }
 
@@ -41,6 +46,10 @@ public class TeacherServiceImplJpa implements TeacherService {
     }
 
     public void updateTeacher(Teacher teacher) throws Exception{
+        Teacher existingTeacher = teacherRepository.findByEmail(teacher.getEmail());
+        if (existingTeacher != null) {
+            throw new TeacherAlreadyExistsException("Teacher with this email already exists, Email: " + teacher.getEmail());
+        }
         teacherRepository.save(teacher);
     }
 
