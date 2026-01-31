@@ -2,6 +2,7 @@ package com.edutech.progressive.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,8 @@ public class CourseServiceImplJpa implements CourseService {
 
     @Override
     public Integer addCourse(Course course) throws Exception {
-        Course existingCourse = courseRepository.findByCourseName(course.getCourseName());
-        if (existingCourse != null) {
+        Optional<Course> existingCourse = courseRepository.findById(course.getCourseId());
+        if (existingCourse.isPresent()) {
             throw new CourseAlreadyExistsException("Course with this name already exists, Course Name: " + course.getCourseName());
         }
         return courseRepository.save(course).getCourseId();
